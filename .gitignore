@@ -1,0 +1,7 @@
+**/node_modules
+**/.idea
+**/obj/**
+**/bin/debug/*
+**/bin/release/*
+**/*.dll
+**/*.pdb

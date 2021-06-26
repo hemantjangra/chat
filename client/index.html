@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Handler</title>
+</head>
+<body>
+  <input id = "messageBox" type="text" placeholder="message"/>
+  <button id="postMessage"> Send Message</button>
+  <ul id="messages">
+
+  </ul>
+
+  <script language="JavaScript" type="text/javascript">
+      var uri="ws://"+"localhost:5000"+"/ws";
+      function connect(){
+          const socket = new WebSocket(uri);
+          socket.onopen = (event) =>{
+              console.log(`opened connection to ${uri}`);
+              socket.send("connection is open now");
+          };
+
+          socket.onclose = (event) =>{
+              console.log(`closed connection from ${uri}`);
+          };
+
+          socket.onmessage = (event) =>{
+              console.log(event.data);
+          };
+
+          socket.onerror = (event) =>{
+              console.log(`error is ${event.data}`);
+          };
+
+
+          return socket;
+      }
+
+      const socket = connect();
+
+      const button = document.getElementById("postMessage");
+      button.addEventListener('click', ()=>{
+         const inputMessage = document.getElementById('messageBox');
+         const value = inputMessage.value;
+         sendMessage(value);
+      });
+
+      const sendMessage = (message) =>{
+          console.log(`message value is ${message}`)
+          const requestUri = `http://localhost:5000/api/v1/sendMessage?message=${message}`;
+          fetch(requestUri)
+              .then(response=> console.log('message'))
+              .catch(err =>
+                  console.log(err));
+          // socket.send(message);
+      }
+  </script>
+</body>
+</html>
